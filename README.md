@@ -18,6 +18,16 @@ A production-inspired full-stack hospitality application built with
 
 </div>
 
+<p align="center">
+  <a href="https://stayfinder-smart-hotel-search.vercel.app/">
+    <strong>🌐 Live Demo</strong>
+  </a>
+  &nbsp;&nbsp;•&nbsp;&nbsp;
+  <a href="https://github.com/techy-bhavya/stayfinder-smart-hotel-search">
+    <strong>💻 Source Code</strong>
+  </a>
+</p>
+
 ---
 
 ## 📖 Overview
@@ -584,29 +594,18 @@ docs/API.md
 
 Contains details about the available backend endpoints.
 
-### Interview Guide
+## 🌐 Live Deployment
 
-```text
-docs/INTERVIEW_GUIDE.md
-```
+- **Frontend:** [Open StayFinder](https://stayfinder-smart-hotel-search.vercel.app/)
+- **Backend Health:** [Check API Status](https://stayfinder-smart-hotel-search-production.up.railway.app/api/health)
+- **Source Code:** [GitHub Repository](https://github.com/techy-bhavya/stayfinder-smart-hotel-search)
 
-Covers:
-
-- System architecture
-- Database design
-- Data structures and algorithms
-- Ranking logic
-- Authentication flow
-- Booking conflict validation
-- REST API design
-- Common technical interview questions
-- Project cross-questions and answers
+The React frontend is deployed on Vercel, while the Spring Boot API and MySQL database are hosted on Railway.
 
 ---
 
 ## 🔮 Future Improvements
 
-- Public cloud deployment
 - Redis-based distributed caching
 - Interactive maps and nearby attractions
 - Online payment gateway integration
