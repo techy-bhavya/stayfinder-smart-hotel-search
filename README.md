@@ -1,167 +1,637 @@
-# StayFinder — Smart Hotel Search, Booking & Analytics Platform
+<div align="center">
 
-StayFinder is a resume-ready, full-stack hospitality technology project built for software engineering and data-focused graduate roles. It combines a production-style Java backend, a polished React frontend, SQL-backed booking workflows, explainable search ranking, caching, analytics, Docker, testing and CI.
+# 🏨 StayFinder
 
-## Why this project stands out
+### Smart Hotel Search, Recommendation & Booking Platform
 
-- **Real business domain:** hotel discovery, room availability, bookings, reviews and revenue analytics.
-- **DSA used meaningfully:** Trie autocomplete, heap-based top-K ranking, HashMap-backed LRU cache and interval-overlap checks.
-- **Strong backend engineering:** Spring Boot, REST APIs, JWT authentication, validation, exception handling, layered architecture and unit tests.
-- **Database depth:** relational modelling, JPA, SQL constraints, indexes, aggregate analytics and MySQL support.
-- **Deployment-ready:** Docker Compose, Nginx, health checks and GitHub Actions.
-- **Explainable ranking:** every hotel result includes a score breakdown instead of behaving like a black box.
+A production-inspired full-stack hospitality application built with  
+**Java, Spring Boot, React, TypeScript, MySQL and Docker**.
 
-## Tech stack
+<br>
 
-| Layer | Technology |
-|---|---|
-| Frontend | React, TypeScript, Vite, Recharts, Lucide |
-| Backend | Java 21, Spring Boot, Spring Security, Spring Data JPA |
-| Database | MySQL 8 in Docker; H2 for zero-setup local development |
-| Authentication | JWT + BCrypt |
-| DevOps | Docker, Docker Compose, Nginx, GitHub Actions |
-| Testing | JUnit 5, Spring Boot Test |
+![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?logo=springboot&logoColor=white)
+![React](https://img.shields.io/badge/React-TypeScript-61DAFB?logo=react&logoColor=black)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI-2088FF?logo=githubactions&logoColor=white)
 
-## Architecture
+</div>
 
-```mermaid
-flowchart LR
-    UI[React + TypeScript] --> API[Spring Boot REST API]
-    API --> AUTH[JWT Security]
-    API --> SEARCH[Search Service]
-    SEARCH --> TRIE[Trie Autocomplete]
-    SEARCH --> HEAP[PriorityQueue Top-K Ranker]
-    SEARCH --> CACHE[LRU Cache]
-    API --> BOOK[Booking Service]
-    BOOK --> DB[(MySQL / H2)]
-    API --> ANALYTICS[Analytics Service]
-    ANALYTICS --> DB
+---
+
+## 📖 Overview
+
+**StayFinder** is a full-stack hotel discovery and booking platform that combines real-world hospitality workflows with data structures, search optimisation and explainable hotel ranking.
+
+Users can search for properties, compare recommendations, inspect the reason behind each ranking, view room inventory, check availability, create bookings, publish reviews and manage previous trips.
+
+The application uses a React frontend, a Spring Boot REST API, MySQL persistence and Docker Compose for local multi-container deployment.
+
+---
+
+## ✨ Key Features
+
+- Search hotels by name, city or locality
+- Dynamically filter and rank matching properties
+- Explain the score behind every recommendation
+- View hotel details, amenities, ratings and guest reviews
+- Check room inventory and live availability
+- Select room categories according to price and guest capacity
+- Calculate booking cost using check-in and check-out dates
+- Prevent conflicting bookings using date-overlap validation
+- Secure authentication using JWT and Spring Security
+- Role-based access for customers and administrators
+- View booking history through the **My Trips** section
+- Submit hotel reviews and ratings
+- Responsive user interface for desktop and mobile screens
+- Docker-based local deployment
+- Continuous integration using GitHub Actions
+
+---
+
+## 📸 Screenshots
+
+### Home Page
+
+![StayFinder Home Page](docs/screenshots/home.png)
+
+---
+
+### Search Results
+
+![StayFinder Search Results](docs/screenshots/search-results.png)
+
+---
+
+### Explainable Ranking
+
+Users can expand **Why this result?** to understand how the hotel received its match score.
+
+![StayFinder Ranking Explanation](docs/screenshots/ranking-explanation.png)
+
+---
+
+### Hotel Details
+
+![StayFinder Hotel Details](docs/screenshots/hotel-details.png)
+
+---
+
+### Booking Confirmation
+
+![StayFinder Booking Confirmation](docs/screenshots/booking-page.png)
+
+---
+
+## 🧠 Data Structures and Algorithms
+
+StayFinder is not limited to basic CRUD operations. Its search and booking workflows use meaningful data structures and algorithms.
+
+### Trie
+
+Used for efficient prefix-based hotel, city and locality suggestions.
+
+Typical prefix-search complexity:
+
+```text
+O(m)
 ```
 
-## Main features
+where `m` is the length of the searched prefix.
 
-### Customer experience
-- Search by hotel name, city, dates, price, rating and amenities.
-- Instant Trie-powered suggestions.
-- Heap-ranked results with score explanations.
-- Room-level availability and conflict prevention.
-- JWT login and registration.
-- Booking history and cancellation.
-- Verified-user review submission.
+---
 
-### Admin analytics
-- Revenue, bookings, occupancy and cancellation KPIs.
-- Six-month revenue trend.
-- City-wise performance.
-- Top-performing properties.
+### Heap / Priority Queue
 
-### Engineering features
-- Global exception handling.
-- DTO-based API contract.
-- Input validation.
-- Database indexes.
-- Custom LRU cache.
-- Unit tests for core algorithms.
-- Docker health checks.
+Used to efficiently select the top-ranked hotels from the available search results.
 
-## Run with Docker — recommended
+Top-K ranking complexity:
 
-Prerequisite: Docker Desktop must be running.
-
-```bash
-cp .env.example .env
-docker compose up --build
+```text
+O(n log k)
 ```
 
-Open:
+where:
 
-- Frontend: `http://localhost:3000`
-- Backend API: `http://localhost:8080/api`
-- Health endpoint: `http://localhost:8080/api/health`
+- `n` is the number of matching hotels
+- `k` is the number of top results required
 
-Demo accounts:
+---
 
-- Admin: `admin@stayfinder.dev` / `Admin@123`
-- Customer: `demo@stayfinder.dev` / `Demo@123`
+### LRU Cache
 
-## Run without Docker
+Used to cache recent search results and avoid repeating expensive ranking operations for identical queries.
 
-### Backend
+Primary operations:
 
-Install Java 21 and Maven 3.9+.
-
-```bash
-cd backend
-mvn spring-boot:run
+```text
+Get: O(1)
+Put: O(1)
 ```
 
-The default profile uses an in-memory H2 database.
+---
+
+### HashMap
+
+Used for fast lookup, scoring, grouping and in-memory access during hotel ranking and search processing.
+
+Average lookup complexity:
+
+```text
+O(1)
+```
+
+---
+
+### Interval Overlap Validation
+
+Used to prevent multiple users from booking the same room for overlapping dates.
+
+Two booking intervals overlap when:
+
+```text
+requestedCheckIn < existingCheckOut
+AND
+requestedCheckOut > existingCheckIn
+```
+
+---
+
+### Weighted Ranking Engine
+
+Hotels are scored using multiple factors:
+
+- Text relevance
+- Guest rating
+- Price value
+- Amenities
+- Popularity
+
+The calculated score is shown on every hotel card, and its contribution can be inspected through the **Why this result?** feature.
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+- React
+- TypeScript
+- Vite
+- React Router
+- Recharts
+- CSS
+- Fetch-based REST API integration
 
-Open `http://localhost:5173`.
+### Backend
 
-## Important API endpoints
+- Java 21
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+- Hibernate
+- JWT authentication
+- Bean Validation
+- REST APIs
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| POST | `/api/auth/register` | Create account |
-| POST | `/api/auth/login` | Login and receive JWT |
-| GET | `/api/hotels/search` | Filtered and ranked hotel search |
-| GET | `/api/hotels/autocomplete?q=` | Trie-based suggestions |
-| GET | `/api/hotels/{id}` | Hotel details and available rooms |
-| POST | `/api/bookings` | Create booking |
-| GET | `/api/bookings/me` | Logged-in user's bookings |
-| PATCH | `/api/bookings/{id}/cancel` | Cancel booking |
-| POST | `/api/hotels/{id}/reviews` | Submit review |
-| GET | `/api/analytics/overview` | Admin analytics dashboard |
+### Database
 
-## DSA mapping
+- MySQL
+- Relational data modelling
+- Database indexing
+- JPA repositories
+- Transaction management
 
-| Data structure / algorithm | Where it is used | Complexity |
-|---|---|---|
-| Trie | Search suggestions | `O(m)` lookup for prefix length `m` |
-| Min-heap / PriorityQueue | Keep best `K` hotels without sorting everything | `O(n log K)` |
-| HashMap + doubly-linked order | LRU search cache | Average `O(1)` get/put |
-| Interval overlap | Prevent double booking | Database-backed overlap check |
-| Weighted scoring | Explainable ranking | `O(n)` scoring |
+### DevOps
 
-## Resume bullets
+- Docker
+- Docker Compose
+- Nginx
+- Git
+- GitHub
+- GitHub Actions
 
-- Built a full-stack hotel discovery and booking platform using **Java, Spring Boot, React, TypeScript, MySQL and Docker**, implementing secure JWT authentication and room-level availability checks.
-- Designed a **Trie-powered autocomplete**, **heap-based top-K ranking engine** and **LRU cache** to deliver fast, explainable hotel search across multiple filters.
-- Developed an analytics dashboard for **revenue, occupancy, cancellations and city-level KPIs**, backed by relational data modelling and aggregate queries.
-- Containerised the system with Docker Compose and added automated build/test checks through GitHub Actions.
+---
 
-## Suggested interview demo flow
-
-1. Search for “Jai” and show autocomplete.
-2. Filter by pool, rating and budget.
-3. Explain the ranking score shown on each card.
-4. Open a hotel, choose dates and book a room.
-5. Attempt an overlapping booking and show conflict prevention.
-6. Open “My Trips”.
-7. Login as admin and show the analytics dashboard.
-8. Open the algorithm unit tests and architecture diagram.
-
-## Repository structure
+## 🏗️ Architecture
 
 ```text
-stayfinder-project/
-├── backend/          Spring Boot API
-├── frontend/         React application
-├── docs/             API and interview notes
-├── .github/workflows CI pipeline
+┌──────────────────────────────┐
+│      React + TypeScript      │
+│          Frontend            │
+└──────────────┬───────────────┘
+               │
+               │ HTTP / REST API
+               ▼
+┌──────────────────────────────┐
+│       Spring Boot API        │
+│ Controllers, Services, DTOs  │
+└──────────────┬───────────────┘
+               │
+               │ JPA / Hibernate
+               ▼
+┌──────────────────────────────┐
+│        MySQL Database        │
+│ Users, Hotels, Rooms,        │
+│ Bookings and Reviews         │
+└──────────────────────────────┘
+```
+
+The backend follows a layered architecture:
+
+```text
+Controller
+    │
+    ▼
+Service
+    │
+    ▼
+Repository
+    │
+    ▼
+Database
+```
+
+### Layer Responsibilities
+
+| Layer | Responsibility |
+|---|---|
+| Controller | Receives HTTP requests and returns API responses |
+| Service | Contains application and business logic |
+| Repository | Communicates with the database using Spring Data JPA |
+| DTO | Transfers validated data between API layers |
+| Entity | Represents database tables |
+| Security | Handles JWT authentication and authorisation |
+
+---
+
+## 🔄 Core Application Flow
+
+```text
+User enters search criteria
+          │
+          ▼
+Search request reaches Spring Boot
+          │
+          ▼
+Hotels are filtered from the database
+          │
+          ▼
+Ranking score is calculated
+          │
+          ▼
+Heap selects top matching properties
+          │
+          ▼
+Results are cached and returned
+          │
+          ▼
+React renders ranked hotel cards
+```
+
+Booking flow:
+
+```text
+User selects property and dates
+          │
+          ▼
+Available rooms are requested
+          │
+          ▼
+Backend validates date overlap
+          │
+          ▼
+Room availability is rechecked
+          │
+          ▼
+Booking is stored in MySQL
+          │
+          ▼
+Confirmation is returned to the user
+```
+
+---
+
+## 📁 Project Structure
+
+```text
+stayfinder-smart-hotel-search/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+├── backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   └── resources/
+│   │   └── test/
+│   ├── pom.xml
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   └── types/
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── nginx.conf
+│   └── Dockerfile
+│
+├── docs/
+│   ├── screenshots/
+│   │   ├── home.png
+│   │   ├── search-results.png
+│   │   ├── ranking-explanation.png
+│   │   ├── hotel-details.png
+│   │   └── booking-page.png
+│   ├── API.md
+│   └── INTERVIEW_GUIDE.md
+│
+├── scripts/
+├── .env.example
+├── .gitignore
 ├── docker-compose.yml
+├── Makefile
 └── README.md
 ```
 
-## Notes for production hardening
+---
 
-For a real production deployment, move secrets to a managed secret store, use managed MySQL, add refresh tokens, rate limiting, distributed caching such as Redis, object storage for images, observability, migrations with Flyway and a payment provider.
+## 🚀 Running the Project Locally
+
+### Prerequisites
+
+Install the following tools:
+
+- Git
+- Docker Desktop
+- Docker Compose
+
+Java, Node.js and MySQL do not need to be installed separately when running the complete project through Docker.
+
+---
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/techy-bhavya/stayfinder-smart-hotel-search.git
+cd stayfinder-smart-hotel-search
+```
+
+---
+
+### 2. Create the Environment File
+
+For macOS or Linux:
+
+```bash
+cp .env.example .env
+```
+
+For Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+---
+
+### 3. Start the Application
+
+```bash
+docker compose up --build
+```
+
+The first build may take a few minutes because Docker downloads the required images and dependencies.
+
+---
+
+### 4. Open the Application
+
+```text
+Frontend: http://localhost:3000
+Backend:  http://localhost:8080/api
+Health:   http://localhost:8080/api/health
+```
+
+A successful health response looks similar to:
+
+```json
+{
+  "service": "stayfinder-api",
+  "status": "UP"
+}
+```
+
+---
+
+### 5. Stop the Application
+
+Press:
+
+```text
+Ctrl + C
+```
+
+Then run:
+
+```bash
+docker compose down
+```
+
+To restart the existing containers without rebuilding:
+
+```bash
+docker compose up
+```
+
+---
+
+## 🔐 Demo Accounts
+
+### Customer Account
+
+```text
+Email: demo@stayfinder.dev
+Password: Demo@123
+```
+
+### Administrator Account
+
+```text
+Email: admin@stayfinder.dev
+Password: Admin@123
+```
+
+> These credentials are intended only for the local demonstration environment.
+
+---
+
+## 🔌 Main API Modules
+
+The backend exposes REST endpoints for:
+
+- Authentication
+- Hotel discovery
+- Search suggestions
+- Hotel ranking
+- Room inventory
+- Room availability
+- Booking creation
+- Booking cancellation
+- Booking history
+- Reviews
+- Administrative analytics
+- Health monitoring
+
+Detailed endpoint documentation is available in:
+
+```text
+docs/API.md
+```
+
+---
+
+## 🔒 Security
+
+StayFinder includes:
+
+- Password hashing
+- JWT-based authentication
+- Protected API routes
+- Role-based authorisation
+- Request validation
+- Centralised exception handling
+- Environment-based configuration
+- Ignored secret files through `.gitignore`
+
+The actual `.env` file is not committed to the repository.
+
+---
+
+## 🗃️ Main Data Models
+
+The application is organised around the following core entities:
+
+```text
+User
+Hotel
+Room
+Booking
+Review
+```
+
+Important relationships include:
+
+```text
+Hotel  1 ──────── * Room
+Hotel  1 ──────── * Review
+User   1 ──────── * Booking
+Room   1 ──────── * Booking
+User   1 ──────── * Review
+```
+
+---
+
+## 🧪 Testing and Continuous Integration
+
+The repository includes an automated GitHub Actions workflow.
+
+The CI pipeline validates the project whenever code is pushed to GitHub.
+
+It helps verify:
+
+- Backend compilation
+- Frontend compilation
+- TypeScript validation
+- Dependency installation
+- Build integrity
+
+The latest workflow status can be viewed in the repository's **Actions** tab.
+
+---
+
+## 💡 Engineering Highlights
+
+- Full-stack layered architecture
+- Explainable ranking instead of random recommendation cards
+- Top-K hotel selection using a Heap
+- Prefix search using a Trie
+- Constant-time cache operations through an LRU cache
+- Booking conflict prevention using interval-overlap logic
+- Secure authentication using JWT
+- MySQL-backed persistent storage
+- Responsive React user interface
+- Multi-container Docker setup
+- Nginx-based frontend serving
+- Automated GitHub Actions workflow
+
+---
+
+## 📚 Project Documentation
+
+### API Guide
+
+```text
+docs/API.md
+```
+
+Contains details about the available backend endpoints.
+
+### Interview Guide
+
+```text
+docs/INTERVIEW_GUIDE.md
+```
+
+Covers:
+
+- System architecture
+- Database design
+- Data structures and algorithms
+- Ranking logic
+- Authentication flow
+- Booking conflict validation
+- REST API design
+- Common technical interview questions
+- Project cross-questions and answers
+
+---
+
+## 🔮 Future Improvements
+
+- Public cloud deployment
+- Redis-based distributed caching
+- Interactive maps and nearby attractions
+- Online payment gateway integration
+- Email booking confirmations
+- Personalised hotel recommendations
+- Advanced administrative analytics
+- OpenAPI and Swagger documentation
+- Integration testing
+- Load and performance testing
+- Booking invoices and QR codes
+- Multi-language and multi-currency support
+
+---
+
+## 👨‍💻 Author
+
+**Bhavya Choudhary**
+
+- GitHub: [@techy-bhavya](https://github.com/techy-bhavya)
+- Repository: [StayFinder Smart Hotel Search](https://github.com/techy-bhavya/stayfinder-smart-hotel-search)
+
+---
+
+## ⚠️ Disclaimer
+
+StayFinder uses demonstration data and was developed for learning, portfolio presentation and technical interview preparation.
+
+It is not intended to process real payments or production hotel reservations.
